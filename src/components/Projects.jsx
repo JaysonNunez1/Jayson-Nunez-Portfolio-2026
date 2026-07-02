@@ -1,0 +1,194 @@
+import { motion } from 'framer-motion'
+
+const fadeUp = (delay = 0) => ({
+  initial: { y: 40, opacity: 0 },
+  whileInView: { y: 0, opacity: 1 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+})
+
+const projects = [
+  {
+    number: '01',
+    name: 'Active Eats!',
+    description:
+      'A calorie-tracking and workout companion app. Users can log their meals, track calories per serving, and discover exercises to burn off what they consumed — all in one seamless UI.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'REST API'],
+    github: 'https://github.com/JaysonNunez1/active-eats',
+    role: 'Frontend & Styling',
+  },
+  {
+    number: '02',
+    name: 'Weather Dashboard',
+    description:
+      'A clean weather app powered by the OpenWeather API. Search any city and instantly see current conditions plus a 5-day forecast with weather icons — all updated dynamically on the page.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'Bootstrap', 'OpenWeather API'],
+    github: 'https://github.com/JaysonNunez1/Jaysons-Weather-Dashboard-1',
+    role: 'Sole Author',
+  },
+  {
+    number: '03',
+    name: 'Password Generator',
+    description:
+      'A simple but complete password generator. Users choose their desired length and character types; the app instantly generates a secure random password and displays it in the input field.',
+    tags: ['JavaScript', 'CSS', 'HTML'],
+    github: 'https://github.com/JaysonNunez1/Jaysons-Password-Generator',
+    role: 'Sole Author',
+  },
+]
+
+export default function Projects() {
+  return (
+    <section id="projects" style={s.section}>
+      <div className="section-container">
+
+        <motion.p {...fadeUp(0)} style={s.label}>02 — Projects</motion.p>
+
+        <motion.h2 {...fadeUp(0.1)} style={s.heading}>
+          Things I've built
+        </motion.h2>
+
+        <div style={s.grid}>
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.name}
+              {...fadeUp(0.1 * i)}
+              whileHover={{ y: -6 }}
+              transition={{ duration: 0.3 }}
+              style={s.card}
+            >
+              <div style={s.cardTop}>
+                <span style={s.num}>{p.number}</span>
+                <a
+                  href={p.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={s.ghLink}
+                  title="GitHub"
+                >
+                  {/* GitHub icon SVG */}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  ↗
+                </a>
+              </div>
+
+              <h3 style={s.name}>{p.name}</h3>
+              <p style={s.desc}>{p.description}</p>
+
+              <div style={s.meta}>
+                <span style={s.role}>Role: {p.role}</span>
+              </div>
+
+              <div style={s.tags}>
+                {p.tags.map(t => (
+                  <span key={t} style={s.tag}>{t}</span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const s = {
+  section: {
+    padding: '8rem 0',
+    position: 'relative',
+    zIndex: 1,
+  },
+  label: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.75rem',
+    color: '#c2a4ff',
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    marginBottom: '1rem',
+  },
+  heading: {
+    fontFamily: "'Geist', sans-serif",
+    fontSize: 'clamp(1.8rem, 4vw, 2.75rem)',
+    fontWeight: 700,
+    color: '#e8e3ef',
+    letterSpacing: '-0.02em',
+    marginBottom: '3.5rem',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '1.5rem',
+  },
+  card: {
+    background: '#13111e',
+    border: '1px solid #2a2538',
+    borderRadius: '10px',
+    padding: '2rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.85rem',
+    transition: 'border-color 0.3s',
+  },
+  cardTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  num: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.75rem',
+    color: '#2a2538',
+    letterSpacing: '0.1em',
+  },
+  ghLink: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    color: '#8a8698',
+    fontSize: '0.875rem',
+    transition: 'color 0.2s',
+  },
+  name: {
+    fontFamily: "'Geist', sans-serif",
+    fontSize: '1.25rem',
+    fontWeight: 600,
+    color: '#e8e3ef',
+    letterSpacing: '-0.01em',
+  },
+  desc: {
+    fontFamily: "'Geist', sans-serif",
+    fontSize: '0.9rem',
+    fontWeight: 300,
+    color: '#8a8698',
+    lineHeight: 1.75,
+    flex: 1,
+  },
+  meta: {
+    borderTop: '1px solid #2a2538',
+    paddingTop: '0.85rem',
+  },
+  role: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.7rem',
+    color: '#7eb8d4',
+    letterSpacing: '0.08em',
+  },
+  tags: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '0.5rem',
+  },
+  tag: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.65rem',
+    color: '#8a8698',
+    background: '#0a0a0f',
+    border: '1px solid #2a2538',
+    borderRadius: '3px',
+    padding: '0.25rem 0.6rem',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+  },
+}
