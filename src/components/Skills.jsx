@@ -22,7 +22,28 @@ const skillGroups = [
   },
   {
     category: 'Tools & Other',
-    skills: ['Git', 'GitHub', 'Vite', 'Responsive Design', 'Microsoft Excel', 'Google Docs'],
+    skills: ['Git', 'GitHub', 'Vite', 'Responsive Design', 'Microsoft Word', 'Microsoft Excel', 'Google Docs'],
+  },
+]
+
+const certifications = [
+  {
+    name: 'Claude AI Certification',
+    issuer: 'Anthropic · Skilljar',
+    year: '2025',
+    status: 'earned',
+  },
+  {
+    name: 'Full-Stack Web Development Certificate',
+    issuer: 'Columbia Engineering Bootcamps · GetSmarter',
+    year: '2024',
+    status: 'earned',
+  },
+  {
+    name: 'Claude AI Certification',
+    issuer: 'Anthropic',
+    year: 'In Progress',
+    status: 'inprogress',
   },
 ]
 
@@ -55,6 +76,26 @@ export default function Skills() {
             </motion.div>
           ))}
         </div>
+
+        {/* Certifications */}
+        <motion.p {...fadeUp(0.1)} style={{ ...s.label, marginTop: '5rem', marginBottom: '1.5rem' }}>
+          Certifications
+        </motion.p>
+
+        <div style={s.certGrid}>
+          {certifications.map((cert, i) => (
+            <motion.div key={cert.name + cert.year} {...fadeUp(0.1 + i * 0.08)} style={cert.status === 'inprogress' ? { ...s.certCard, ...s.certCardInProgress } : s.certCard}>
+              <div style={s.certTop}>
+                <span style={s.certName}>{cert.name}</span>
+                <span style={cert.status === 'inprogress' ? s.certBadgeInProgress : s.certBadge}>
+                  {cert.status === 'inprogress' ? 'In Progress' : cert.year}
+                </span>
+              </div>
+              <span style={s.certIssuer}>{cert.issuer}</span>
+            </motion.div>
+          ))}
+        </div>
+
       </div>
     </section>
   )
@@ -118,5 +159,59 @@ const s = {
     padding: '0.35rem 0.75rem',
     transition: 'border-color 0.2s, color 0.2s',
     display: 'inline-block',
+  },
+  certGrid: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
+  },
+  certCard: {
+    background: '#13111e',
+    border: '1px solid #2a2538',
+    borderRadius: '10px',
+    padding: '1.25rem 1.75rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.35rem',
+  },
+  certCardInProgress: {
+    borderStyle: 'dashed',
+    opacity: 0.65,
+  },
+  certTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '1rem',
+  },
+  certName: {
+    fontFamily: "'Geist', sans-serif",
+    fontSize: '0.95rem',
+    fontWeight: 500,
+    color: '#e8e3ef',
+  },
+  certBadge: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.65rem',
+    color: '#7eb8d4',
+    border: '1px solid #7eb8d4',
+    borderRadius: '3px',
+    padding: '0.15rem 0.5rem',
+    whiteSpace: 'nowrap',
+  },
+  certBadgeInProgress: {
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.65rem',
+    color: '#c2a4ff',
+    border: '1px dashed #c2a4ff',
+    borderRadius: '3px',
+    padding: '0.15rem 0.5rem',
+    whiteSpace: 'nowrap',
+  },
+  certIssuer: {
+    fontFamily: "'Geist', sans-serif",
+    fontSize: '0.8rem',
+    fontWeight: 300,
+    color: '#8a8698',
   },
 }
