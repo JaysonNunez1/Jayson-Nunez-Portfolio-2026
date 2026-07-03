@@ -32,12 +32,14 @@ const certifications = [
     issuer: 'Anthropic · Skilljar',
     year: '2026',
     status: 'earned',
+    link: 'https://verify.skilljar.com/c/a3gd8cmrwdxr',
   },
   {
     name: 'Full-Stack Web Development Certificate',
     issuer: 'Columbia Engineering Bootcamps · GetSmarter',
     year: '2024',
     status: 'earned',
+    link: 'https://columbia.credential.getsmarter.com/8b0ecedd-3837-4627-a991-511c50cf5320#acc.Y5abxtRg',
   },
   {
     name: 'Claude AI Certification',
@@ -91,7 +93,14 @@ export default function Skills() {
                   {cert.status === 'inprogress' ? 'In Progress' : cert.year}
                 </span>
               </div>
-              <span style={s.certIssuer}>{cert.issuer}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span style={s.certIssuer}>{cert.issuer}</span>
+                {cert.link && (
+                  <a href={cert.link} target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: '#c2a4ff', textDecoration: 'none', letterSpacing: '0.5px' }}>
+                    Verify ↗
+                  </a>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
