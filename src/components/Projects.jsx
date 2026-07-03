@@ -25,8 +25,8 @@ const projects = [
       'A clean weather app powered by the OpenWeather API. Search any city and instantly see current conditions plus a 5-day forecast with weather icons — all updated dynamically on the page.',
     tags: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'Bootstrap', 'OpenWeather API'],
     github: 'https://github.com/JaysonNunez1/Jaysons-Weather-Dashboard-1',
+    demo: 'https://jaysonnunez1.github.io/Jaysons-Weather-Dashboard-1/',
     role: 'Sole Author',
-    comingSoon: true,
   },
   {
     number: '03',
@@ -40,6 +40,14 @@ const projects = [
   },
   {
     number: '04',
+    name: 'Heavy Hive Studios',
+    description: 'A recording studio web app where users can book studio sessions and subscribe to beats and studio time packages — built for Heavy Hive Studios.',
+    tags: ['React', 'JavaScript', 'CSS', 'Vercel'],
+    demo: 'https://heavy-hive-studios.vercel.app/',
+    role: 'Sole Author',
+  },
+  {
+    number: '05',
     name: 'More Projects Coming Soon',
     description: 'Always building something new — check back soon.',
     tags: [],

@@ -30,7 +30,7 @@ const certifications = [
   {
     name: 'Claude AI Certification',
     issuer: 'Anthropic · Skilljar',
-    year: '2025',
+    year: '2026',
     status: 'earned',
   },
   {
