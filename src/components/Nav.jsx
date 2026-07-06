@@ -5,9 +5,15 @@ const links = ['About', 'Projects', 'Skills', 'Contact']
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40)
+      const el = document.documentElement
+      const scrollable = el.scrollHeight - el.clientHeight
+      setProgress(scrollable > 0 ? (el.scrollTop / scrollable) * 100 : 0)
+    }
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -28,6 +34,10 @@ export default function Nav() {
         backdropFilter: scrolled ? 'blur(14px)' : 'none',
       }}
     >
+      {/* Scroll progress bar */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: 'rgba(42,37,56,0.5)' }}>
+        <motion.div style={{ height: '100%', background: 'linear-gradient(90deg, #c2a4ff, #7eb8d4)', width: `${progress}%`, transition: 'width 0.12s linear' }} />
+      </div>
       <div style={navStyles.inner}>
         {/* Logo */}
         <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={navStyles.logo}>

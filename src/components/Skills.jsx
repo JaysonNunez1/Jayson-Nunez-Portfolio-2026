@@ -7,6 +7,15 @@ const fadeUp = (delay = 0) => ({
   transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
 })
 
+const pillContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.055, delayChildren: 0.1 } },
+}
+const pillItem = {
+  hidden: { opacity: 0, y: 12, scale: 0.92 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
+}
+
 const skillGroups = [
   {
     category: 'Frontend',
@@ -64,17 +73,24 @@ export default function Skills() {
           {skillGroups.map((group, i) => (
             <motion.div key={group.category} {...fadeUp(0.1 + i * 0.08)} style={s.group}>
               <h3 style={s.category}>{group.category}</h3>
-              <div style={s.pills}>
+              <motion.div
+                variants={pillContainer}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: '-40px' }}
+                style={s.pills}
+              >
                 {group.skills.map(skill => (
                   <motion.span
                     key={skill}
+                    variants={pillItem}
                     whileHover={{ borderColor: '#c2a4ff', color: '#c2a4ff' }}
                     style={s.pill}
                   >
                     {skill}
                   </motion.span>
                 ))}
-              </div>
+              </motion.div>
             </motion.div>
           ))}
         </div>

@@ -1,11 +1,5 @@
-import { motion } from 'framer-motion'
-
-const fadeUp = (delay = 0) => ({
-  initial: { y: 40, opacity: 0 },
-  whileInView: { y: 0, opacity: 1 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-})
+import { useRef } from 'react'
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
 
 const projects = [
   {
@@ -41,13 +35,23 @@ const projects = [
   {
     number: '04',
     name: 'Heavy Hive Studios',
-    description: 'A recording studio web app where users can book studio sessions and subscribe to beats and studio time packages — built for Heavy Hive Studios.',
+    description:
+      'A recording studio web app where users can book studio sessions and subscribe to beats and studio time packages — built for Heavy Hive Studios.',
     tags: ['React', 'JavaScript', 'CSS', 'Vercel'],
     demo: 'https://heavy-hive-studios.vercel.app/',
     role: 'Sole Author',
   },
   {
     number: '05',
+    name: 'Lucy Rainbow Daycare',
+    description:
+      'A warm, full-featured website for a licensed family daycare in Richmond Hill, Queens — 20+ years of trusted neighborhood care. Features program details, a photo gallery, and contact info.',
+    tags: ['HTML', 'CSS', 'JavaScript', 'Vercel'],
+    demo: 'https://lucy-rainbow-daycare.vercel.app/',
+    role: 'Sole Author',
+  },
+  {
+    number: '06',
     name: 'More Projects Coming Soon',
     description: 'Always building something new — check back soon.',
     tags: [],
@@ -62,82 +66,137 @@ const GitHubIcon = () => (
   </svg>
 )
 
+function TiltCard({ p, i }) {
+  const ref = useRef(null)
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const rotateX = useTransform(y, [-0.5, 0.5], [7, -7])
+  const rotateY = useTransform(x, [-0.5, 0.5], [-7, 7])
+  const springRotX = useSpring(rotateX, { stiffness: 280, damping: 24 })
+  const springRotY = useSpring(rotateY, { stiffness: 280, damping: 24 })
+
+  const handleMouse = (e) => {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    x.set((e.clientX - rect.left) / rect.width - 0.5)
+    y.set((e.clientY - rect.top) / rect.height - 0.5)
+  }
+
+  const handleLeave = () => {
+    x.set(0)
+    y.set(0)
+  }
+
+  if (p.placeholder) {
+    return (
+      <motion.div
+        initial={{ y: 40, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ delay: 0.1 * i, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        style={{ ...s.card, ...s.placeholderCard }}
+      >
+        <div style={s.placeholderInner}>
+          <span style={s.placeholderNum}>{p.number}</span>
+          <h3 style={s.placeholderTitle}>{p.name}</h3>
+          <p style={s.placeholderDesc}>{p.description}</p>
+        </div>
+      </motion.div>
+    )
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ y: 40, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ delay: 0.1 * i, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ boxShadow: '0 0 0 1px rgba(194,164,255,0.35), 0 24px 60px rgba(194,164,255,0.12)' }}
+      onMouseMove={handleMouse}
+      onMouseLeave={handleLeave}
+      style={{
+        ...s.card,
+        rotateX: springRotX,
+        rotateY: springRotY,
+        transformPerspective: 900,
+      }}
+    >
+      <div style={s.cardTop}>
+        <div style={s.cardTopLeft}>
+          <span style={s.num}>{p.number}</span>
+        </div>
+        <div style={s.links}>
+          {p.demo && (
+            <a
+              href={p.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={s.demoLink}
+              title="Live Demo"
+            >
+              ↗ Demo
+            </a>
+          )}
+          {p.github && (
+            <a
+              href={p.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={s.ghLink}
+              title="GitHub"
+            >
+              <GitHubIcon />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <h3 style={s.name}>{p.name}</h3>
+      <p style={s.desc}>{p.description}</p>
+
+      <div style={s.meta}>
+        <span style={s.role}>Role: {p.role}</span>
+      </div>
+
+      <div style={s.tags}>
+        {p.tags.map(t => (
+          <span key={t} style={s.tag}>{t}</span>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function Projects() {
   return (
     <section id="projects" style={s.section}>
       <div className="section-container">
 
-        <motion.p {...fadeUp(0)} style={s.label}>02 — Projects</motion.p>
+        <motion.p
+          initial={{ y: 40, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ delay: 0, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={s.label}
+        >
+          02 — Projects
+        </motion.p>
 
-        <motion.h2 {...fadeUp(0.1)} style={s.heading}>
+        <motion.h2
+          initial={{ y: 40, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ delay: 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          style={s.heading}
+        >
           Things I've built
         </motion.h2>
 
         <div style={s.grid}>
           {projects.map((p, i) => (
-            <motion.div
-              key={p.name}
-              {...fadeUp(0.1 * i)}
-              whileHover={!p.placeholder ? { y: -6 } : {}}
-              transition={{ duration: 0.3 }}
-              style={p.placeholder ? { ...s.card, ...s.placeholderCard } : s.card}
-            >
-              {p.placeholder ? (
-                <div style={s.placeholderInner}>
-                  <span style={s.placeholderNum}>{p.number}</span>
-                  <h3 style={s.placeholderTitle}>{p.name}</h3>
-                  <p style={s.placeholderDesc}>{p.description}</p>
-                </div>
-              ) : (
-                <>
-                  <div style={s.cardTop}>
-                    <div style={s.cardTopLeft}>
-                      <span style={s.num}>{p.number}</span>
-                      {p.comingSoon && (
-                        <span style={s.comingSoonBadge}>Coming Soon</span>
-                      )}
-                    </div>
-                    <div style={s.links}>
-                      {p.demo && (
-                        <a
-                          href={p.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={s.demoLink}
-                          title="Live Demo"
-                        >
-                          ↗ Demo
-                        </a>
-                      )}
-                      {!p.comingSoon && (
-                        <a
-                          href={p.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={s.ghLink}
-                          title="GitHub"
-                        >
-                          <GitHubIcon />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  <h3 style={s.name}>{p.name}</h3>
-                  <p style={s.desc}>{p.description}</p>
-
-                  <div style={s.meta}>
-                    <span style={s.role}>Role: {p.role}</span>
-                  </div>
-
-                  <div style={s.tags}>
-                    {p.tags.map(t => (
-                      <span key={t} style={s.tag}>{t}</span>
-                    ))}
-                  </div>
-                </>
-              )}
-            </motion.div>
+            <TiltCard key={p.name} p={p} i={i} />
           ))}
         </div>
       </div>
@@ -181,6 +240,7 @@ const s = {
     flexDirection: 'column',
     gap: '0.85rem',
     transition: 'border-color 0.3s',
+    cursor: 'default',
   },
   placeholderCard: {
     borderStyle: 'dashed',
@@ -230,16 +290,6 @@ const s = {
     fontSize: '0.75rem',
     color: '#2a2538',
     letterSpacing: '0.1em',
-  },
-  comingSoonBadge: {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '0.6rem',
-    color: '#7eb8d4',
-    border: '1px solid #7eb8d4',
-    borderRadius: '3px',
-    padding: '0.15rem 0.5rem',
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
   },
   links: {
     display: 'flex',

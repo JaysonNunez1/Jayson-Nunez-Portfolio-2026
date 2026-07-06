@@ -1,5 +1,31 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+
+function CountUp({ target, suffix = '' }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true })
+  const num = parseInt(target)
+  const isNum = !isNaN(num)
+  const [display, setDisplay] = useState(isNum ? '0' : target)
+
+  useEffect(() => {
+    if (!inView) return
+    if (!isNum) { setDisplay(target); return }
+    let raf
+    const start = performance.now()
+    const duration = 1300
+    const animate = (now) => {
+      const t = Math.min((now - start) / duration, 1)
+      const ease = 1 - Math.pow(1 - t, 3)
+      setDisplay(Math.round(ease * num).toString())
+      if (t < 1) raf = requestAnimationFrame(animate)
+    }
+    raf = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(raf)
+  }, [inView]) // eslint-disable-line
+
+  return <span ref={ref}>{display}{isNum ? suffix : ''}</span>
+}
 
 const fadeUp = (delay = 0) => ({
   initial: { y: 40, opacity: 0 },
@@ -9,10 +35,10 @@ const fadeUp = (delay = 0) => ({
 })
 
 const stats = [
-  { value: '3+', label: 'Years Building' },
-  { value: '10+', label: 'Projects Shipped' },
-  { value: 'Columbia', label: 'Bootcamp Certified' },
-  { value: 'NYC', label: 'Based In' },
+  { value: '3', suffix: '+', label: 'Years Building' },
+  { value: '10', suffix: '+', label: 'Projects Shipped' },
+  { value: 'Columbia', suffix: '', label: 'Bootcamp Certified' },
+  { value: 'NYC', suffix: '', label: 'Based In' },
 ]
 
 export default function About() {
@@ -51,9 +77,11 @@ export default function About() {
 
           {/* Right: stats */}
           <motion.div {...fadeUp(0.2)} style={s.statsGrid}>
-            {stats.map(({ value, label }) => (
+            {stats.map(({ value, suffix, label }) => (
               <div key={label} style={s.statCard}>
-                <span style={s.statValue}>{value}</span>
+                <span style={s.statValue}>
+                  <CountUp target={value} suffix={suffix} />
+                </span>
                 <span style={s.statLabel}>{label}</span>
               </div>
             ))}

@@ -29,27 +29,28 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      {/* Ambient glow */}
-      <div style={{
-        position: 'absolute',
-        top: '30%',
-        left: '10%',
-        width: 500,
-        height: 500,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(194,164,255,0.08) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-      <div style={{
-        position: 'absolute',
-        top: '20%',
-        right: '5%',
-        width: 350,
-        height: 350,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(126,184,212,0.06) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
+      {/* Ambient glow — animated */}
+      <style>{`
+        @keyframes nameShimmer {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ position: 'absolute', top: '30%', left: '10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(194,164,255,0.1) 0%, transparent 70%)', pointerEvents: 'none' }}
+      />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+        style={{ position: 'absolute', top: '20%', right: '5%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(126,184,212,0.08) 0%, transparent 70%)', pointerEvents: 'none' }}
+      />
+      <motion.div
+        animate={{ scale: [1, 1.1, 1], x: [0, 18, 0], y: [0, -12, 0] }}
+        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
+        style={{ position: 'absolute', bottom: '12%', right: '22%', width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(194,164,255,0.06) 0%, transparent 70%)', pointerEvents: 'none' }}
+      />
 
       <div className="section-container" style={{ paddingTop: '8rem', paddingBottom: '6rem', width: '100%' }}>
 
@@ -146,10 +147,15 @@ const s = {
     fontFamily: "'Geist', sans-serif",
     fontSize: 'clamp(3.5rem, 10vw, 9rem)',
     fontWeight: 800,
-    color: '#e8e3ef',
     letterSpacing: '-0.02em',
     lineHeight: 1,
     textTransform: 'uppercase',
+    background: 'linear-gradient(135deg, #e8e3ef 0%, #c2a4ff 35%, #7eb8d4 65%, #e8e3ef 100%)',
+    backgroundSize: '250% 250%',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    animation: 'nameShimmer 6s ease infinite',
   },
   subtitle: {
     fontFamily: "'JetBrains Mono', monospace",
