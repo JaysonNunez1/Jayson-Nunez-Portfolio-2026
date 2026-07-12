@@ -1,28 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
+import { colors } from '../theme'
+
+const HOVER_TARGETS = 'a, button, [role=button]'
 
 export default function CustomCursor() {
   const dotRef = useRef(null)
   const ringRef = useRef(null)
   const pos = useRef({ x: -100, y: -100 })
   const ring = useRef({ x: -100, y: -100 })
+  const hoverRef = useRef(false)
   const [hovering, setHovering] = useState(false)
-  const animId = useRef(null)
 
   useEffect(() => {
+    // Hover state is detected via delegation on mousemove, so links and
+    // buttons mounted after the loading screen are picked up too.
     const onMove = e => {
       pos.current = { x: e.clientX, y: e.clientY }
+      const isHover = !!e.target.closest?.(HOVER_TARGETS)
+      hoverRef.current = isHover
+      setHovering(isHover)
     }
-
-    const onEnter = () => setHovering(true)
-    const onLeave = () => setHovering(false)
-
-    window.addEventListener('mousemove', onMove)
-    document.querySelectorAll('a, button, [role=button]').forEach(el => {
-      el.addEventListener('mouseenter', onEnter)
-      el.addEventListener('mouseleave', onLeave)
-    })
+    window.addEventListener('mousemove', onMove, { passive: true })
 
     const lerp = (a, b, t) => a + (b - a) * t
+    let animId
 
     const animate = () => {
       if (dotRef.current && ringRef.current) {
@@ -31,19 +32,19 @@ export default function CustomCursor() {
 
         ring.current.x = lerp(ring.current.x, pos.current.x, 0.12)
         ring.current.y = lerp(ring.current.y, pos.current.y, 0.12)
-        const s = hovering ? 2.2 : 1
+        const scale = hoverRef.current ? 2.2 : 1
         ringRef.current.style.transform =
-          `translate(${ring.current.x - 16}px, ${ring.current.y - 16}px) scale(${s})`
+          `translate(${ring.current.x - 16}px, ${ring.current.y - 16}px) scale(${scale})`
       }
-      animId.current = requestAnimationFrame(animate)
+      animId = requestAnimationFrame(animate)
     }
     animate()
 
     return () => {
       window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(animId.current)
+      cancelAnimationFrame(animId)
     }
-  }, [hovering])
+  }, [])
 
   return (
     <>
@@ -56,7 +57,7 @@ export default function CustomCursor() {
           width: 8,
           height: 8,
           borderRadius: '50%',
-          background: '#c2a4ff',
+          background: colors.accent,
           pointerEvents: 'none',
           zIndex: 99999,
           willChange: 'transform',
@@ -72,7 +73,7 @@ export default function CustomCursor() {
           width: 32,
           height: 32,
           borderRadius: '50%',
-          border: `1.5px solid ${hovering ? '#c2a4ff' : '#7eb8d4'}`,
+          border: `1.5px solid ${hovering ? colors.accent : colors.accent2}`,
           pointerEvents: 'none',
           zIndex: 99998,
           willChange: 'transform',

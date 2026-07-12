@@ -1,68 +1,63 @@
 import { motion } from 'framer-motion'
+import { EASE, fadeUpOnLoad, staggerContainer } from '../lib/motion'
+import { colors, fonts } from '../theme'
+import { NAME, social } from '../data/site'
 
-const NAME = 'JAYSON NUNEZ'
-
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06, delayChildren: 0.3 } },
-}
+const letterContainer = staggerContainer(0.06, 0.3)
 const letter = {
   hidden: { y: 80, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+  show: { y: 0, opacity: 1, transition: { duration: 0.7, ease: EASE } },
 }
-const fadeUp = (delay = 0) => ({
-  initial: { y: 30, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-})
+
+// Slow-drifting radial glows behind the hero text.
+const orbs = [
+  {
+    animate: { scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] },
+    transition: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
+    style: { top: '30%', left: '10%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(194,164,255,0.1) 0%, transparent 70%)' },
+  },
+  {
+    animate: { scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] },
+    transition: { duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 },
+    style: { top: '20%', right: '5%', width: 350, height: 350, background: 'radial-gradient(circle, rgba(126,184,212,0.08) 0%, transparent 70%)' },
+  },
+  {
+    animate: { scale: [1, 1.1, 1], x: [0, 18, 0], y: [0, -12, 0] },
+    transition: { duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 6 },
+    style: { bottom: '12%', right: '22%', width: 260, height: 260, background: 'radial-gradient(circle, rgba(194,164,255,0.06) 0%, transparent 70%)' },
+  },
+]
 
 export default function Hero() {
   return (
-    <section
-      id="hero"
-      style={{
-        minHeight: '100svh',
-        display: 'flex',
-        alignItems: 'center',
-        position: 'relative',
-        zIndex: 1,
-        overflow: 'hidden',
-      }}
-    >
-      {/* Ambient glow — animated */}
+    <section id="hero" style={s.section}>
       <style>{`
         @keyframes nameShimmer {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
         }
       `}</style>
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'absolute', top: '30%', left: '10%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(194,164,255,0.1) 0%, transparent 70%)', pointerEvents: 'none' }}
-      />
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-        style={{ position: 'absolute', top: '20%', right: '5%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(126,184,212,0.08) 0%, transparent 70%)', pointerEvents: 'none' }}
-      />
-      <motion.div
-        animate={{ scale: [1, 1.1, 1], x: [0, 18, 0], y: [0, -12, 0] }}
-        transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
-        style={{ position: 'absolute', bottom: '12%', right: '22%', width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(194,164,255,0.06) 0%, transparent 70%)', pointerEvents: 'none' }}
-      />
+
+      {orbs.map((orb, i) => (
+        <motion.div
+          key={i}
+          animate={orb.animate}
+          transition={orb.transition}
+          style={{ ...s.orb, ...orb.style }}
+        />
+      ))}
 
       <div className="section-container" style={{ paddingTop: '8rem', paddingBottom: '6rem', width: '100%' }}>
 
         {/* Greeting */}
-        <motion.p {...fadeUp(0.1)} style={s.greeting}>
+        <motion.p {...fadeUpOnLoad(0.1)} style={s.greeting}>
           Hello, I'm
         </motion.p>
 
         {/* Name — letter by letter */}
         <div style={s.nameWrap}>
           <motion.div
-            variants={container}
+            variants={letterContainer}
             initial="hidden"
             animate="show"
             style={s.nameInner}
@@ -80,20 +75,20 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <motion.p {...fadeUp(0.8)} style={s.subtitle}>
+        <motion.p {...fadeUpOnLoad(0.8)} style={s.subtitle}>
           {'Full-Stack Developer'}
         </motion.p>
 
         {/* Tagline */}
-        <motion.p {...fadeUp(1.0)} style={s.tagline}>
+        <motion.p {...fadeUpOnLoad(1.0)} style={s.tagline}>
           Building fast, responsive, and customer-first web applications.
         </motion.p>
 
         {/* CTAs */}
-        <motion.div {...fadeUp(1.2)} style={s.ctas}>
+        <motion.div {...fadeUpOnLoad(1.2)} style={s.ctas}>
           <a href="#projects" style={s.btnPrimary}>View My Work</a>
           <a
-            href="https://github.com/JaysonNunez1"
+            href={social.github}
             target="_blank"
             rel="noopener noreferrer"
             style={s.btnGhost}
@@ -101,7 +96,7 @@ export default function Hero() {
             GitHub ↗
           </a>
           <a
-            href="https://www.linkedin.com/in/jayson-nunez-838623304/"
+            href={social.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             style={s.btnGhost}
@@ -111,16 +106,13 @@ export default function Hero() {
         </motion.div>
 
         {/* Scroll hint */}
-        <motion.div
-          {...fadeUp(1.6)}
-          style={s.scrollHint}
-        >
+        <motion.div {...fadeUpOnLoad(1.6)} style={s.scrollHint}>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             style={s.scrollDot}
           />
-          <span style={{ fontSize: '0.7rem', letterSpacing: '0.15em', color: '#8a8698', textTransform: 'uppercase' }}>
+          <span style={s.scrollText}>
             Scroll
           </span>
         </motion.div>
@@ -130,11 +122,24 @@ export default function Hero() {
 }
 
 const s = {
+  section: {
+    minHeight: '100svh',
+    display: 'flex',
+    alignItems: 'center',
+    position: 'relative',
+    zIndex: 1,
+    overflow: 'hidden',
+  },
+  orb: {
+    position: 'absolute',
+    borderRadius: '50%',
+    pointerEvents: 'none',
+  },
   greeting: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '1rem',
     fontWeight: 300,
-    color: '#c2a4ff',
+    color: colors.accent,
     letterSpacing: '0.12em',
     textTransform: 'uppercase',
     marginBottom: '1rem',
@@ -144,13 +149,13 @@ const s = {
     marginBottom: '1.25rem',
   },
   nameInner: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: 'clamp(3.5rem, 10vw, 9rem)',
     fontWeight: 800,
     letterSpacing: '-0.02em',
     lineHeight: 1,
     textTransform: 'uppercase',
-    background: 'linear-gradient(135deg, #e8e3ef 0%, #c2a4ff 35%, #7eb8d4 65%, #e8e3ef 100%)',
+    background: `linear-gradient(135deg, ${colors.text} 0%, ${colors.accent} 35%, ${colors.accent2} 65%, ${colors.text} 100%)`,
     backgroundSize: '250% 250%',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
@@ -158,18 +163,18 @@ const s = {
     animation: 'nameShimmer 6s ease infinite',
   },
   subtitle: {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: fonts.mono,
     fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
     fontWeight: 300,
-    color: '#7eb8d4',
+    color: colors.accent2,
     letterSpacing: '0.08em',
     marginBottom: '1.5rem',
   },
   tagline: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '1.05rem',
     fontWeight: 300,
-    color: '#8a8698',
+    color: colors.muted,
     maxWidth: 500,
     lineHeight: 1.7,
     marginBottom: '2.5rem',
@@ -181,11 +186,11 @@ const s = {
     marginBottom: '4rem',
   },
   btnPrimary: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.875rem',
     fontWeight: 500,
-    color: '#0a0a0f',
-    background: 'linear-gradient(135deg, #c2a4ff, #7eb8d4)',
+    color: colors.bg,
+    background: `linear-gradient(135deg, ${colors.accent}, ${colors.accent2})`,
     border: 'none',
     borderRadius: '4px',
     padding: '0.75rem 1.75rem',
@@ -194,12 +199,12 @@ const s = {
     transition: 'opacity 0.2s',
   },
   btnGhost: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.875rem',
     fontWeight: 400,
-    color: '#e8e3ef',
+    color: colors.text,
     background: 'transparent',
-    border: '1px solid #2a2538',
+    border: `1px solid ${colors.border}`,
     borderRadius: '4px',
     padding: '0.75rem 1.5rem',
     letterSpacing: '0.06em',
@@ -214,7 +219,13 @@ const s = {
   scrollDot: {
     width: 1,
     height: 40,
-    background: 'linear-gradient(to bottom, #c2a4ff, transparent)',
+    background: `linear-gradient(to bottom, ${colors.accent}, transparent)`,
     borderRadius: '1px',
+  },
+  scrollText: {
+    fontSize: '0.7rem',
+    letterSpacing: '0.15em',
+    color: colors.muted,
+    textTransform: 'uppercase',
   },
 }

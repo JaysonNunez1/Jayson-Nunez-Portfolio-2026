@@ -1,73 +1,16 @@
 import { motion } from 'framer-motion'
+import { fadeUp, staggerContainer, staggerItem } from '../lib/motion'
+import { colors, fonts } from '../theme'
+import { skillGroups, certifications } from '../data/skills'
+import SectionHeader from './SectionHeader'
 
-const fadeUp = (delay = 0) => ({
-  initial: { y: 40, opacity: 0 },
-  whileInView: { y: 0, opacity: 1 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { delay, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-})
-
-const pillContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.055, delayChildren: 0.1 } },
-}
-const pillItem = {
-  hidden: { opacity: 0, y: 12, scale: 0.92 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
-}
-
-const skillGroups = [
-  {
-    category: 'Frontend',
-    skills: ['React', 'JavaScript ES6+', 'HTML5', 'CSS3', 'Bootstrap', 'jQuery', 'Framer Motion'],
-  },
-  {
-    category: 'Backend',
-    skills: ['Node.js', 'Express.js', 'Handlebars', 'REST APIs'],
-  },
-  {
-    category: 'Database',
-    skills: ['MongoDB', 'MySQL', 'SQL', 'NoSQL'],
-  },
-  {
-    category: 'Tools & Other',
-    skills: ['Git', 'GitHub', 'Vite', 'Responsive Design', 'Microsoft Word', 'Microsoft Excel', 'Google Docs'],
-  },
-]
-
-const certifications = [
-  {
-    name: 'Claude AI Certification',
-    issuer: 'Anthropic · Skilljar',
-    year: '2026',
-    status: 'earned',
-    link: 'https://verify.skilljar.com/c/a3gd8cmrwdxr',
-  },
-  {
-    name: 'Full-Stack Web Development Certificate',
-    issuer: 'Columbia Engineering Bootcamps · GetSmarter',
-    year: '2024',
-    status: 'earned',
-    link: 'https://columbia.credential.getsmarter.com/8b0ecedd-3837-4627-a991-511c50cf5320#acc.Y5abxtRg',
-  },
-  {
-    name: 'Claude AI Certification',
-    issuer: 'Anthropic',
-    year: 'In Progress',
-    status: 'inprogress',
-  },
-]
+const pillContainer = staggerContainer()
 
 export default function Skills() {
   return (
     <section id="skills" style={s.section}>
       <div className="section-container">
-
-        <motion.p {...fadeUp(0)} style={s.label}>03 — Skills</motion.p>
-
-        <motion.h2 {...fadeUp(0.1)} style={s.heading}>
-          My tech stack
-        </motion.h2>
+        <SectionHeader label="03 — Skills" title="My tech stack" />
 
         <div style={s.grid}>
           {skillGroups.map((group, i) => (
@@ -83,8 +26,8 @@ export default function Skills() {
                 {group.skills.map(skill => (
                   <motion.span
                     key={skill}
-                    variants={pillItem}
-                    whileHover={{ borderColor: '#c2a4ff', color: '#c2a4ff' }}
+                    variants={staggerItem}
+                    whileHover={{ borderColor: colors.accent, color: colors.accent }}
                     style={s.pill}
                   >
                     {skill}
@@ -96,9 +39,10 @@ export default function Skills() {
         </div>
 
         {/* Certifications */}
-        <motion.p {...fadeUp(0.1)} style={{ ...s.label, marginTop: '5rem', marginBottom: '1.5rem' }}>
-          Certifications
-        </motion.p>
+        <SectionHeader
+          label="Certifications"
+          labelStyle={{ marginTop: '5rem', marginBottom: '1.5rem' }}
+        />
 
         <div style={s.certGrid}>
           {certifications.map((cert, i) => (
@@ -112,7 +56,7 @@ export default function Skills() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <span style={s.certIssuer}>{cert.issuer}</span>
                 {cert.link && (
-                  <a href={cert.link} target="_blank" rel="noopener noreferrer" style={{ fontSize: '11px', color: '#c2a4ff', textDecoration: 'none', letterSpacing: '0.5px' }}>
+                  <a href={cert.link} target="_blank" rel="noopener noreferrer" style={s.certVerify}>
                     Verify ↗
                   </a>
                 )}
@@ -132,38 +76,22 @@ const s = {
     position: 'relative',
     zIndex: 1,
   },
-  label: {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '0.75rem',
-    color: '#c2a4ff',
-    letterSpacing: '0.18em',
-    textTransform: 'uppercase',
-    marginBottom: '1rem',
-  },
-  heading: {
-    fontFamily: "'Geist', sans-serif",
-    fontSize: 'clamp(1.8rem, 4vw, 2.75rem)',
-    fontWeight: 700,
-    color: '#e8e3ef',
-    letterSpacing: '-0.02em',
-    marginBottom: '3.5rem',
-  },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
     gap: '2rem',
   },
   group: {
-    background: '#13111e',
-    border: '1px solid #2a2538',
+    background: colors.card,
+    border: `1px solid ${colors.border}`,
     borderRadius: '10px',
     padding: '1.75rem',
   },
   category: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.7rem',
     fontWeight: 600,
-    color: '#7eb8d4',
+    color: colors.accent2,
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
     marginBottom: '1.25rem',
@@ -174,12 +102,12 @@ const s = {
     gap: '0.5rem',
   },
   pill: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.85rem',
     fontWeight: 400,
-    color: '#8a8698',
-    background: '#0a0a0f',
-    border: '1px solid #2a2538',
+    color: colors.muted,
+    background: colors.bg,
+    border: `1px solid ${colors.border}`,
     borderRadius: '4px',
     padding: '0.35rem 0.75rem',
     transition: 'border-color 0.2s, color 0.2s',
@@ -191,8 +119,8 @@ const s = {
     gap: '0.75rem',
   },
   certCard: {
-    background: '#13111e',
-    border: '1px solid #2a2538',
+    background: colors.card,
+    border: `1px solid ${colors.border}`,
     borderRadius: '10px',
     padding: '1.25rem 1.75rem',
     display: 'flex',
@@ -210,33 +138,39 @@ const s = {
     gap: '1rem',
   },
   certName: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.95rem',
     fontWeight: 500,
-    color: '#e8e3ef',
+    color: colors.text,
   },
   certBadge: {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: fonts.mono,
     fontSize: '0.65rem',
-    color: '#7eb8d4',
-    border: '1px solid #7eb8d4',
+    color: colors.accent2,
+    border: `1px solid ${colors.accent2}`,
     borderRadius: '3px',
     padding: '0.15rem 0.5rem',
     whiteSpace: 'nowrap',
   },
   certBadgeInProgress: {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: fonts.mono,
     fontSize: '0.65rem',
-    color: '#c2a4ff',
-    border: '1px dashed #c2a4ff',
+    color: colors.accent,
+    border: `1px dashed ${colors.accent}`,
     borderRadius: '3px',
     padding: '0.15rem 0.5rem',
     whiteSpace: 'nowrap',
   },
   certIssuer: {
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: '0.8rem',
     fontWeight: 300,
-    color: '#8a8698',
+    color: colors.muted,
+  },
+  certVerify: {
+    fontSize: '11px',
+    color: colors.accent,
+    textDecoration: 'none',
+    letterSpacing: '0.5px',
   },
 }

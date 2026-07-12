@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { colors, fonts } from '../theme'
 
 const TICKER_TEXT = 'FULL-STACK DEVELOPER  •  REACT  •  NODE.JS  •  JAVASCRIPT  •  '
 
@@ -28,11 +29,11 @@ export default function LoadingScreen({ onComplete }) {
           key="loader"
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-          style={styles.wrapper}
+          style={s.wrapper}
         >
           {/* Monogram */}
           <motion.div
-            style={styles.monogram}
+            style={s.monogram}
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
@@ -40,23 +41,23 @@ export default function LoadingScreen({ onComplete }) {
           </motion.div>
 
           {/* Progress number */}
-          <div style={styles.progressNum}>
+          <div style={s.progressNum}>
             {Math.min(Math.round(progress), 100)}
           </div>
 
           {/* Progress bar */}
-          <div style={styles.barTrack}>
+          <div style={s.barTrack}>
             <motion.div
-              style={styles.barFill}
+              style={s.barFill}
               animate={{ width: `${Math.min(progress, 100)}%` }}
               transition={{ ease: 'linear', duration: 0.1 }}
             />
           </div>
 
           {/* Scrolling ticker */}
-          <div style={styles.tickerWrap}>
+          <div style={s.tickerWrap}>
             <motion.div
-              style={styles.tickerInner}
+              style={s.tickerInner}
               animate={{ x: ['0%', '-50%'] }}
               transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
             >
@@ -71,12 +72,12 @@ export default function LoadingScreen({ onComplete }) {
   )
 }
 
-const styles = {
+const s = {
   wrapper: {
     position: 'fixed',
     inset: 0,
     zIndex: 9999,
-    background: '#0a0a0f',
+    background: colors.bg,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -85,28 +86,28 @@ const styles = {
     overflow: 'hidden',
   },
   monogram: {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: fonts.mono,
     fontSize: 'clamp(2.5rem, 6vw, 5rem)',
     fontWeight: 500,
-    color: '#c2a4ff',
+    color: colors.accent,
     letterSpacing: '0.05em',
   },
   progressNum: {
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: fonts.mono,
     fontSize: '0.85rem',
-    color: '#8a8698',
+    color: colors.muted,
     letterSpacing: '0.15em',
   },
   barTrack: {
     width: 'clamp(180px, 30vw, 320px)',
     height: '1px',
-    background: '#2a2538',
+    background: colors.border,
     borderRadius: '1px',
     overflow: 'hidden',
   },
   barFill: {
     height: '100%',
-    background: 'linear-gradient(90deg, #c2a4ff, #7eb8d4)',
+    background: `linear-gradient(90deg, ${colors.accent}, ${colors.accent2})`,
     borderRadius: '1px',
   },
   tickerWrap: {
@@ -119,11 +120,11 @@ const styles = {
   },
   tickerInner: {
     display: 'inline-block',
-    fontFamily: "'Geist', sans-serif",
+    fontFamily: fonts.sans,
     fontSize: 'clamp(3rem, 8vw, 7rem)',
     fontWeight: 700,
     color: 'transparent',
-    WebkitTextStroke: '1px #2a2538',
+    WebkitTextStroke: `1px ${colors.border}`,
     letterSpacing: '0.05em',
     textTransform: 'uppercase',
   },
